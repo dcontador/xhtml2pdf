@@ -254,7 +254,7 @@ class PmlPageTemplate(PageTemplate):
                 if pagenumber > self._page_count:
                     self._page_count = canvas.getPageNumber()
                     canvas._doctemplate._page_count = canvas.getPageNumber()
-                
+
                 for frame in self.pisaStaticList:
                     frame = copy.deepcopy(frame)
                     story = frame.pisaStaticStory
@@ -601,8 +601,29 @@ class PmlParagraph(Paragraph, PmlMaxHeightMixIn):
         # call the base class to do wrapping and calculate the size
         Paragraph.wrap(self, availWidth, availHeight)
 
-        # self.height = max(1, self.height)
-        # self.width = max(1, self.width)
+        def dim_to_points(x):
+            if x.endswith("cm"):
+                return 28.346456692913 * float(x[:-2])
+            if x.endswith("em"):
+                return 11.955168 * float(x[:-2])
+            if x.endswith("pt"):
+                return float(x[:-2])
+            if x.endswith("px"):
+                return 0.75 * float(x[:-2])
+            if x == "auto":
+                return None
+            try:
+                return float(x)
+            except ValueError:
+                return None
+
+        self.height = max(1, self.height)
+        self.width = max(1, self.width)
+
+        for at in ["height", "width"]:
+            value = dim_to_points(getattr(style, at, "auto") or "auto")
+            if value:
+                setattr(self, at, value)
 
         # increase the calculated size by the padding
         self.width = self.width + self.deltaWidth
