@@ -508,7 +508,8 @@ class pisaContext(object):
                        'borderLeftWidth', 'borderLeftColor',
                        'borderRightStyle', 'borderRightWidth',
                        'borderRightColor', 'paddingTop', 'paddingBottom',
-                       'paddingLeft', 'paddingRight', 'borderPadding'
+                       'paddingLeft', 'paddingRight', 'borderPadding',
+                       'width', 'height',
                     )
                    )
 
